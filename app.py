@@ -312,6 +312,11 @@ def kiosk():
     """Serve the kiosk page."""
     return send_from_directory(app.static_folder, 'kiosk.html')
 
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    """Serve static files (QR codes, challenge files, etc.)."""
+    return send_from_directory(STATIC_DIR, filename)
+
 @socketio.on('connect')
 def handle_connect():
     print('Client connected')

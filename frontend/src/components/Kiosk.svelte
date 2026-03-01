@@ -21,31 +21,26 @@
 </script>
 
 <!-- Portrait A4 layout (210mm x 297mm) -->
-<div class="kiosk-container bg-gray-100 min-h-screen p-8">
+<div class="kiosk-container bg-gray-100 min-h-screen p-4">
   <div class="max-w-2xl mx-auto">
     <!-- Header Section -->
     <div class="text-center mb-8">
       
-      <div class="flex items-center justify-center gap-8 mb-8">
+      <div class="flex items-center justify-center gap-4 mb-8">
         <div class="flex-1">
           <h1 class="text-6xl font-bold text-gray-800 mb-4">
             Bad at reversing?
           </h1>
           <div class="flex-1">
             <p class="text-2xl text-gray-700">
-              Try this increasing-difficulty CTF challenge
+            Try this CTF challenge with progressive difficulty
             </p>
           </div>
         </div>
         
         <!-- QR Code Placeholder -->
         <div class="flex-shrink-0">
-          <div class="w-40 h-40 bg-white border-4 border-gray-300 rounded-lg flex items-center justify-center shadow-md">
-            <div class="text-center">
-              <div class="text-4xl mb-2">📱</div>
-              <div class="text-xs text-gray-500">QR Code</div>
-            </div>
-          </div>
+          <img src="/static/qr.png" alt="Scan to access CTF" class="w-40 h-40 rounded-lg border-4 border-gray-300 shadow-md" />
         </div>
       </div>
     </div>
@@ -117,9 +112,5 @@
       height: 297mm;
       page-break-after: always;
     }
-  }
-
-  body {
-    background: #f8fafc;
   }
 </style>
