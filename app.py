@@ -5,6 +5,7 @@ import json
 import os
 import fcntl
 import time
+from datetime import datetime, timezone
 
 app = Flask(__name__, static_folder='frontend/dist', static_url_path='')
 CORS(app)
@@ -170,13 +171,20 @@ def get_challenges():
 @app.route('/api/scoreboard', methods=['GET'])
 def get_scoreboard():
     scoreboard = load_scoreboard()
-    # Convert to list and sort by score
+    # Convert to list and sort by score (descending), then by timestamp (ascending)
     scoreboard_list = [
-        {"username": username, "score": score}
-        for username, score in scoreboard.items()
+        {
+            "username": username,
+            "score": data.get('score', data) if isinstance(data, dict) else data,
+            "timestamp": data.get('timestamp', 0) if isinstance(data, dict) else 0
+        }
+        for username, data in scoreboard.items()
     ]
-    scoreboard_list.sort(key=lambda x: x['score'], reverse=True)
-    return jsonify(scoreboard_list)
+    # Sort by score descending, then by timestamp ascending (earlier submissions first)
+    scoreboard_list.sort(key=lambda x: (-x['score'], x['timestamp']))
+    
+    # Remove timestamp from response (not needed in frontend)
+    return jsonify([{"username": u["username"], "score": u["score"]} for u in scoreboard_list])
 
 @app.route('/api/download-challenges', methods=['GET'])
 def download_challenges():
@@ -274,18 +282,33 @@ def submit_flag():
         # Update scoreboard
         scoreboard = load_scoreboard()
         
-        # Initialize user if not exists
+        # Initialize user if not exists or convert old format
         if username not in scoreboard:
-            scoreboard[username] = 0
+            scoreboard[username] = {
+                "score": 0,
+                "timestamp": datetime.now(timezone.utc).timestamp()
+            }
+        elif not isinstance(scoreboard[username], dict):
+            # Migrate old format (just score) to new format
+            scoreboard[username] = {
+                "score": scoreboard[username],
+                "timestamp": datetime.now(timezone.utc).timestamp()
+            }
         
-        # Add points
-        scoreboard[username] += correct_challenge['points']
+        # Add points (update timestamp only on first score or when increasing)
+        old_score = scoreboard[username]["score"]
+        scoreboard[username]["score"] += correct_challenge['points']
+        
+        # Update timestamp if this is their first points
+        if old_score == 0:
+            scoreboard[username]["timestamp"] = datetime.now(timezone.utc).timestamp()
+        
         save_scoreboard(scoreboard)
         
         # Emit scoreboard update via WebSocket
         socketio.emit('scoreboard_update', {
             "username": username,
-            "score": scoreboard[username],
+            "score": scoreboard[username]["score"],
             "challenge": correct_challenge['title']
         })
         
