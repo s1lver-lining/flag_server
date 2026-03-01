@@ -21,7 +21,7 @@
 </script>
 
 <!-- Portrait A4 layout (210mm x 297mm) -->
-<div class="kiosk-container bg-gray-100 min-h-screen p-4">
+<div class="kiosk-container bg-gray-50 min-h-screen p-4">
   <div class="max-w-2xl mx-auto">
     <!-- Header Section -->
     <div class="text-center mb-8">

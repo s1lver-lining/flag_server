@@ -48,7 +48,7 @@
 
 <style>
   :global(body) {
-    background-color: #f3f4f6; /* bg-gray-100 */
+    background-color: #f9fafb; /* bg-gray-50 */
     margin: 0;
     padding: 0;
   }
