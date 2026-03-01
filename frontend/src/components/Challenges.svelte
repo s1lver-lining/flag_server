@@ -30,7 +30,7 @@
         Usage: <code>./fvm bytecode.fvm FLAG{'{'}example_flag{'}'}</code><br>
       </p>
       <a 
-        href="http://localhost:5000/api/download-challenges"
+        href="/api/download-challenges"
         download
         class="inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2 px-4 rounded-lg transition-all transform hover:scale-105 shadow-md"
       >

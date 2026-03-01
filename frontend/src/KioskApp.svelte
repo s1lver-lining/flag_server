@@ -3,7 +3,8 @@
   import { io } from 'socket.io-client';
   import Kiosk from './components/Kiosk.svelte';
   
-  const API_URL = 'http://localhost:5000';
+  // Use relative URLs - backend serves frontend
+  const API_URL = '';
   
   let socket;
   let scoreboard = [];

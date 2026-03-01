@@ -5,7 +5,8 @@
   import Scoreboard from './components/Scoreboard.svelte';
   import FlagSubmission from './components/FlagSubmission.svelte';
   
-  const API_URL = 'http://localhost:5000';
+  // Use relative URLs - backend serves frontend
+  const API_URL = '';
   
   let socket;
   let challenges = [];

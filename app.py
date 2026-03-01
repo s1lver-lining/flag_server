@@ -6,7 +6,7 @@ import os
 import fcntl
 import time
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='frontend/dist', static_url_path='')
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
@@ -302,10 +302,15 @@ def submit_flag():
             "message": "An error occurred while processing your submission. Please try again."
         }), 500
 
+@app.route('/')
+def index():
+    """Serve the main frontend page."""
+    return send_from_directory(app.static_folder, 'index.html')
+
 @app.route('/kiosk')
 def kiosk():
     """Serve the kiosk page."""
-    return send_from_directory('frontend/dist', 'kiosk.html')
+    return send_from_directory(app.static_folder, 'kiosk.html')
 
 @socketio.on('connect')
 def handle_connect():
