@@ -118,4 +118,8 @@
       page-break-after: always;
     }
   }
+
+  body {
+    background: #f8fafc;
+  }
 </style>

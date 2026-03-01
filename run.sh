@@ -14,7 +14,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-PORT=${PORT:-80}
+PORT=${PORT:-5000}
 WORKERS=${WORKERS:-1}
 
 # PID tracking

@@ -1,0 +1,29 @@
+[Unit]
+Description=CTF Platform - Flag Submission and Scoreboard
+After=network.target
+
+[Service]
+Type=simple
+User=u
+Group=u
+WorkingDirectory=/home/u/flag_server
+Environment="PATH=/home/u/flag_server/.venv/bin:/home/u/.local/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="NODE_PATH=/home/u/flag_server/frontend/node_modules"
+Environment="PORT=5000"
+Environment="WORKERS=1"
+ExecStart=/home/u/flag_server/run.sh
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/u/flag_server/
+ReadWritePaths=/home/u/.npm
+
+[Install]
+WantedBy=multi-user.target
