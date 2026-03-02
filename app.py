@@ -17,6 +17,7 @@ SCOREBOARD_FILE = os.path.join(DATA_DIR, 'scoreboard.json')
 CHALLENGES_FILE = os.path.join(DATA_DIR, 'challenges.json')
 SOLVES_FILE = os.path.join(DATA_DIR, 'solves.json')
 DOWNLOADS_FILE = os.path.join(DATA_DIR, 'downloads.json')
+ATTEMPTS_FILE = os.path.join(DATA_DIR, 'attempts.json')
 STATIC_DIR = 'static'
 
 # Ensure data directory exists
@@ -41,6 +42,10 @@ def init_data_files():
     if not os.path.exists(DOWNLOADS_FILE):
         with open(DOWNLOADS_FILE, 'w') as f:
             json.dump({"count": 0, "history": []}, f)
+    
+    if not os.path.exists(ATTEMPTS_FILE):
+        with open(ATTEMPTS_FILE, 'w') as f:
+            json.dump([], f)
 
 init_data_files()
 
@@ -129,6 +134,29 @@ def load_downloads():
 
 def save_downloads(downloads):
     save_json_safe(DOWNLOADS_FILE, downloads)
+
+def load_attempts():
+    data = load_json_safe(ATTEMPTS_FILE)
+    # Return empty list if file was corrupted or empty dict
+    return data if isinstance(data, list) else []
+
+def save_attempts(attempts):
+    save_json_safe(ATTEMPTS_FILE, attempts)
+
+def log_attempt(username, flag, success, challenge_title=None):
+    """Log a flag submission attempt."""
+    try:
+        attempts = load_attempts()
+        attempts.append({
+            'username': username,
+            'flag': flag,
+            'success': success,
+            'challenge': challenge_title,
+            'timestamp': datetime.now(timezone.utc).isoformat()
+        })
+        save_attempts(attempts)
+    except Exception as e:
+        print(f"Error logging attempt: {e}")
 
 def increment_download_count():
     """Atomically increment the download counter with race condition protection."""
@@ -255,6 +283,8 @@ def submit_flag():
             break
     
     if not correct_challenge:
+        # Log failed attempt
+        log_attempt(username, flag, False)
         return jsonify({"success": False, "message": "Incorrect flag"}), 400
     
     challenge_id = correct_challenge['id']
@@ -270,6 +300,8 @@ def submit_flag():
         
         # Check if user already solved this challenge
         if challenge_id in solves[username]:
+            # Log duplicate attempt
+            log_attempt(username, flag, False, correct_challenge['title'])
             return jsonify({
                 "success": False,
                 "message": f"You have already solved '{correct_challenge['title']}'!"
@@ -311,6 +343,9 @@ def submit_flag():
             "score": scoreboard[username]["score"],
             "challenge": correct_challenge['title']
         })
+        
+        # Log successful attempt
+        log_attempt(username, flag, True, correct_challenge['title'])
         
         return jsonify({
             "success": True,
