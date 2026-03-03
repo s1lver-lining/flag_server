@@ -45,11 +45,3 @@
 </script>
 
 <Kiosk {scoreboard} />
-
-<style>
-  :global(body) {
-    background-color: #f9fafb; /* bg-gray-50 */
-    margin: 0;
-    padding: 0;
-  }
-</style>

@@ -12,35 +12,38 @@
   
   function getRankColor(rank) {
     switch(rank) {
-      case 1: return 'text-yellow-500';
-      case 2: return 'text-gray-400';
+      case 1: return 'text-yellow-400';
+      case 2: return 'text-gray-300';
       case 3: return 'text-amber-600';
-      default: return 'text-gray-600';
+      default: return 'text-slate-400';
     }
   }
 </script>
 
 <!-- Portrait A4 layout (210mm x 297mm) -->
-<div class="kiosk-container bg-gray-50 min-h-screen p-4">
+<div class="kiosk-container bg-slate-900 min-h-screen p-4">
   <div class="max-w-2xl mx-auto">
     <!-- Header Section -->
     <div class="text-center mb-8">
       
       <div class="flex items-center justify-center gap-4 mb-8">
         <div class="flex-1">
-          <h1 class="text-6xl font-bold text-gray-800 mb-4">
-            Bad at reversing?
+          <h1 class="text-6xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent pb-4">
+            Simple reverse CTF challenge
           </h1>
           <div class="flex-1">
-            <p class="text-2xl text-gray-700">
+            <p class="text-2xl text-slate-300">
             Try this CTF challenge with progressive difficulty
             </p>
           </div>
         </div>
         
         <!-- QR Code Placeholder -->
-        <div class="flex-shrink-0">
-          <img src="/static/qr.png" alt="Scan to access CTF" class="w-40 h-40 rounded-lg border-4 border-gray-300 shadow-md" />
+        <div class="flex-shrink-0 text-center">
+          <img src="/static/qr.png" alt="Scan to access CTF" class="w-40 h-40 rounded-lg border-4 border-slate-700 shadow-md mb-3" />
+          <div class="text-cyan-400 font-mono text-sm break-all leading-tight max-w-[160px]">
+            https://fvm.francecentral.cloudapp.azure.com
+          </div>
         </div>
       </div>
     </div>
@@ -49,14 +52,14 @@
     <div class="mt-12">
       
       {#if scoreboard.length === 0}
-        <div class="bg-white rounded-lg p-8 text-center border border-gray-300 shadow">
-          <p class="text-gray-600 text-xl">No scores yet. Be the first to submit a flag!</p>
+        <div class="bg-slate-800 rounded-lg p-8 text-center border border-slate-700 shadow">
+          <p class="text-slate-400 text-xl">No scores yet. Be the first to submit a flag!</p>
         </div>
       {:else}
-        <div class="bg-white rounded-lg shadow-lg border border-gray-300 overflow-hidden">
+        <div class="bg-slate-800 rounded-lg shadow-lg border border-slate-700 overflow-hidden">
           <!-- Header -->
-          <div class="bg-gray-50 px-6 py-4 border-b border-gray-300">
-            <div class="grid grid-cols-12 gap-4 font-semibold text-gray-700 text-lg">
+          <div class="bg-slate-900 px-6 py-4 border-b border-slate-700">
+            <div class="grid grid-cols-12 gap-4 font-semibold text-slate-300 text-lg">
               <div class="col-span-2 text-center">Rank</div>
               <div class="col-span-7">Username</div>
               <div class="col-span-3 text-right">Score</div>
@@ -64,13 +67,12 @@
           </div>
           
           <!-- Scoreboard entries -->
-          <div class="divide-y divide-gray-200">
+          <div class="divide-y divide-slate-700">
             {#each scoreboard as entry, index}
               <div 
                 class="px-6 py-5 {
-                  index < 3 ? 'bg-gray-50' : 'bg-white'
-                } hover:bg-gray-100 transition-colors"
-              >
+                  index < 3 ? 'bg-slate-750' : ''
+                } hover:bg-slate-700 transition-colors">
                 <div class="grid grid-cols-12 gap-4 items-center">
                   <div class="col-span-2 text-center">
                     <span class="text-3xl font-bold {getRankColor(index + 1)}">
@@ -78,15 +80,15 @@
                     </span>
                   </div>
                   <div class="col-span-7">
-                    <span class="text-xl font-semibold text-gray-800">
+                    <span class="text-xl font-semibold text-slate-100">
                       {entry.username}
                     </span>
                   </div>
                   <div class="col-span-3 text-right">
-                    <span class="text-2xl font-bold text-gray-800">
+                    <span class="text-2xl font-bold text-slate-100">
                       {entry.score}
                     </span>
-                    <span class="text-gray-500 text-base ml-1">pts</span>
+                    <span class="text-slate-400 text-base ml-1">pts</span>
                   </div>
                 </div>
               </div>
